@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Blog, Mentee, Mentor, Home, Author
 from .forms import InputBlog, InputMentee, InputMentor
+from django.http import Http404
 
 # Create your views here.
 def home(request):
@@ -34,8 +35,9 @@ def input_mentee(request):
     if request.method == "POST":
         form_mentee = InputMentee(request.POST)
         if form_mentee.is_valid():
-            post_mentee = form_Mentee.save(commit=False)
+            post_mentee = form_mentee.save(commit=False)
             post_mentee.save()
+            return redirect('mentee')
     else:
         form_mentee = InputMentee()
     return render(request, 'input_mentee.html', {'form_mentee':form_mentee})
@@ -50,6 +52,14 @@ def input_mentor(request):
         if form_mentor.is_valid():
             post_mentor = form_mentor.save(commit=False)
             post_mentor.save()
+            return redirect('mentor')
     else:
         form_mentor = InputMentor()
     return render(request, 'input_mentor.html', {'form_mentor':form_mentor})
+
+def blog_detail(request, blogid):
+    try:
+        detail = Blog.objects.get(pk=blogid)
+    except Blog.DoesNotExist:
+        raise Http404("Page does not exist")
+    return render(request, 'blog_detail.html', {'blog_id':detail})

@@ -10,4 +10,5 @@ urlpatterns = [
     path('mentee/input/', views.input_mentee, name='input_mentee'),
     path('mentor/input/', views.input_mentor, name='input_mentor'),
     path('blog/input/', views.input_blog, name='input_blog'),
+    path('blog/<int:blogid>', views.blog_detail, name='blog_detail'),
 ]
